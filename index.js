@@ -1,8 +1,19 @@
 const http = require('http');
 
 const server = http.createServer((req, res) => {
-  console.log(req.url);
-  res.end('Hello from node js');
+  const { url } = req;
+  console.log(url);
+
+  if (url === '/') {
+    res.end('Hello from Node.js');
+  } else if (url === 'contact') {
+    res.end('The Contact Page')
+  } else if (url === '/about') {
+    res.end('The About Page');
+  } else {
+    res.writeHead(404)
+    res.end('Not Found')
+  }
 });
 
 server.listen(3000, () => {
