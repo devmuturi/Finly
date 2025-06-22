@@ -2,7 +2,7 @@
 node_modules/
 
 # Tailwind generated CSS output
-/public/css/output.css
+/public/css/main.css
 
 # Optional: if you have other build artifacts, ignore them too
 dist/
