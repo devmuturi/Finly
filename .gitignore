@@ -1,1 +1,13 @@
+# Node modules
 node_modules/
+
+# Tailwind generated CSS output
+/public/css/output.css
+
+# Optional: if you have other build artifacts, ignore them too
+dist/
+build/
+
+# Logs, environment files, etc.
+npm-debug.log*
+.env
