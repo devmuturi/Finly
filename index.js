@@ -3,6 +3,9 @@ const morgan = require('morgan');
 
 const app = express();
 
+app.set('views', './views');
+app.set('view engine', 'ejs')
+
 app.use(morgan('dev'));
 
 app.get('/', (req, res) => {
