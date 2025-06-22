@@ -6,8 +6,8 @@ const server = http.createServer((req, res) => {
 
   if (url === '/') {
     res.end('Hello from Node.js');
-  } else if (url === 'contact') {
-    res.end('The Contact Page')
+  } else if (url == '/contact') {
+    res.end('The contact page')
   } else if (url === '/about') {
     res.end('The About Page');
   } else {
