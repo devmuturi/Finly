@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('partials/head')%>
+  <head>
+    <%- include('partials/head') %>
+  </head>
   <body>
-    <h1><%= message %></h1>
-    <p>Response created using EJS</p>
+    <h1 class="text-emerald-500 text-3xl font-bold"><%= message %></h1>
+    <p class="text-emerald-800">Response created using EJS</p>
+    <button class="btn btn-primary m-2">Click me!</button>
   </body>
 </html>
