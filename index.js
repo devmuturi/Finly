@@ -28,7 +28,7 @@ app.get('/about', (req, res) => {
     res.render('index', { message: 'The About Page'})
 });
 
-app.get((req, res) => {
+app.get('/*splat',(req, res) => {
   res.status(404).render('index', { message: 'Not Found' })
 })
 
