@@ -1,38 +1,38 @@
-const express = require('express');
-const morgan = require('morgan');
-const path = require('node:path');
+const express = require('express')
+const morgan = require('morgan')
+const path = require('node:path')
 
-require('dotenv').config();
+require('dotenv').config()
 require('./libs/dbConnect')
 
-const app = express();
+const app = express()
 
 // Add css
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')))
 
 // app.set('views', './views');
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
-app.use(morgan('dev'));
+app.use(morgan('dev'))
 
 app.get('/', (req, res) => {
-  res.render('index', { message: 'Hello from Node.js'})
+  res.render('index', { message: 'Hello from Node.js' })
 })
 
 app.get('/contact', (req, res) => {
-    res.render('index', { message: 'The Contact Page'})
-});
+  res.render('index', { message: 'The Contact Page' })
+})
 
 app.get('/about', (req, res) => {
-    res.render('index', { message: 'The About Page'})
-});
+  res.render('index', { message: 'The About Page' })
+})
 
-app.get('/*splat',(req, res) => {
+app.get('/*splat', (req, res) => {
   res.status(404).render('index', { message: 'Not Found' })
 })
 
-const PORT = 3000;
+const PORT = 3000
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
