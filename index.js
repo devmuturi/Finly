@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const path = require('node:path')
+const userRouter = require('./routes/user.route')
 
 require('dotenv').config()
 require('./libs/dbConnect')
@@ -16,9 +17,12 @@ app.set('view engine', 'ejs')
 
 app.use(morgan('dev'))
 
+// routes
 app.get('/', (req, res) => {
   res.render('index', { message: 'Hello from Node.js' })
 })
+
+app.use('/users', userRouter)
 
 app.get('/contact', (req, res) => {
   res.render('index', { message: 'The Contact Page' })
