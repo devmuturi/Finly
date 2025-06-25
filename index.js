@@ -2,6 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const path = require('node:path')
 const userRouter = require('./routes/user.route')
+const dashboardRouter = require('./routes/dashboard.route')
 const session = require('express-session')
 
 require('dotenv').config()
@@ -33,6 +34,8 @@ app.set('view engine', 'ejs')
 // routes
 
 app.use('/', userRouter)
+
+app.use('/dashboard', dashboardRouter)
 
 app.get('/*splat', (req, res) => {
   res.status(404).render('index', { message: 'Not Found' })
