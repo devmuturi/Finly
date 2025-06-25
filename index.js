@@ -12,6 +12,9 @@ const app = express()
 // Add css
 app.use(morgan('dev'))
 app.use(express.static(path.join(__dirname, 'public')))
+// Used to let express know whether we want to process advanced input formats
+// Like nested objects or arrays
+app.use(express.urlencoded({ extended: false }))
 
 app.use(
   session({
