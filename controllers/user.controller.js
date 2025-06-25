@@ -17,6 +17,7 @@ const signup = async (req, res) => {
   if (!validationErrors.isEmpty()) {
     const errors = validationErrors.array()
     req.flash('errors', errors)
+    req.flash('data', req.body)
     return res.redirect('/signup')
   }
 

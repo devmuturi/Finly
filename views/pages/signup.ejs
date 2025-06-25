@@ -15,7 +15,13 @@
           <%- include('../partials/formErrors')%>
           <label class="input input-bordered flex items-center gap-2">
             <i class="opacity-70 fa-solid fa-envelope"></i>
-            <input name="email" type="email" class="grow" placeholder="Email" />
+            <input
+              name="email"
+              type="email"
+              class="grow"
+              placeholder="Email"
+              value="<%= user?.email || ''%>"
+            />
           </label>
           <label class="input input-bordered flex items-center gap-2">
             <i class="opacity-70 fa-solid fa-key"></i>
@@ -24,6 +30,7 @@
               type="password"
               class="grow"
               placeholder="Password"
+              value="<%= user?.password || ''%>"
             />
           </label>
           <label class="input input-bordered flex items-center gap-2">
@@ -33,6 +40,7 @@
               type="password"
               class="grow"
               placeholder="Repeat Password"
+              value="<%= user?.repeatPassword || ''%>"
             />
           </label>
         </div>
