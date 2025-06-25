@@ -1,11 +1,6 @@
+const { validateSignUp, signup } = require('../controllers/user.controller')
 const { Router } = require('express')
 const router = Router()
-
-// const {
-//   getUser,
-//   createUser,
-//   deleteUser,
-// } = require('../controllers/user.controller')
 
 router.get('/', (req, res) => {
   res.render('pages/index', { title: 'Finly' })
@@ -20,5 +15,7 @@ router.get('/signup', (req, res) => {
     title: 'Sign up',
   })
 })
+
+router.post('/signup', validateSignUp, signup)
 
 module.exports = router

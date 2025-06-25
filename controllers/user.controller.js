@@ -1,7 +1,25 @@
 const User = require('../libs/models/user.model')
 const bcrypt = require('bcrypt')
+const { body, validationResult } = require('express-validator')
+
+const validateSignUp = [
+  body('email', 'Email must not be empty').notEmpty(),
+  body('password', 'Password must not be empty').notEmpty(),
+  body('password', 'Password must be 6+ characters long').isLength({ min: 6 }),
+  body('repeatPassword', 'Repeat Password must not be empty').notEmpty(),
+  body('repeatPassword', 'Password do not match').custom(
+    (value, { req }) => value === req.body.password,
+  ),
+]
 
 const signup = async (req, res) => {
+  const validationErrors = validationResult(req)
+  if (!validationErrors.isEmpty()) {
+    const errors = validationErrors.array()
+    req.flash('errors', errors)
+    return res.redirect('/signup')
+  }
+
   const { email, password } = req.body
   const query = { email }
 
@@ -23,4 +41,4 @@ const signup = async (req, res) => {
   }
 }
 
-module.exports = { signup }
+module.exports = { signup, validateSignUp }
