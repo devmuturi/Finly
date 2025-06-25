@@ -10,9 +10,11 @@ router.get('/login', (req, res) => {
     title: 'Sign in',
   })
 })
+
 router.get('/signup', (req, res) => {
   res.render('pages/signup', {
     title: 'Sign up',
+    errors: req.flash('errors'),
   })
 })
 

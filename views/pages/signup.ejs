@@ -12,6 +12,7 @@
       <form class="space-y-3" action="/signup" method="post">
         <div class="flex flex-col rounded-lg bg-slate-100 p-6 gap-4">
           <h1 class="mb-3 text-2xl">Create Your Account Today</h1>
+          <%- include('../partials/formErrors')%>
           <label class="input input-bordered flex items-center gap-2">
             <i class="opacity-70 fa-solid fa-envelope"></i>
             <input name="email" type="email" class="grow" placeholder="Email" />
