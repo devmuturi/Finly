@@ -4,6 +4,7 @@ const path = require('node:path')
 const userRouter = require('./routes/user.route')
 const dashboardRouter = require('./routes/dashboard.route')
 const session = require('express-session')
+const flash = require('connect-flash')
 
 require('dotenv').config()
 require('./libs/dbConnect')
@@ -26,6 +27,9 @@ app.use(
     resave: false,
   }),
 )
+
+// call the flash
+app.use(flash())
 
 // app.set('views', './views');
 app.set('views', path.join(__dirname, 'views'))
