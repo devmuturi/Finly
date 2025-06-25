@@ -27,6 +27,12 @@ const signup = async (req, res) => {
   const existingUser = await User.findOne(query)
   if (existingUser) {
     // Email already exists
+    req.flash('data', req.body)
+    req.flash('info', {
+      message: 'Email is already registered. Try to login instead',
+      type: 'error',
+    })
+
     res.redirect('/signup')
   } else {
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -38,6 +44,11 @@ const signup = async (req, res) => {
 
     const result = await User.create(user)
     req.session.userId = result._id
+    req.flash('info', {
+      message: 'Signup Successful',
+      type: 'success',
+    })
+
     res.redirect('/dashboard')
   }
 }

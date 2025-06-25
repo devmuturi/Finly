@@ -15,6 +15,7 @@ router.get('/signup', (req, res) => {
   res.render('pages/signup', {
     title: 'Sign up',
     user: req.flash('data')[0],
+    info: req.flash('info')[0],
     errors: req.flash('errors'),
   })
 })
