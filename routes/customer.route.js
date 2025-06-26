@@ -6,6 +6,7 @@ const {
   createCustomer,
   editCustomer,
   updateCustomer,
+  deleteCustomer,
   validateCustomer,
 } = require('../controllers/customer.controller')
 
@@ -26,5 +27,7 @@ router.post('/create', validateCustomer, createCustomer)
 router.get('/:id/edit', editCustomer)
 
 router.post('/:id/edit', validateCustomer, updateCustomer)
+
+router.get('/:id/delete', deleteCustomer)
 
 module.exports = router

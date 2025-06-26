@@ -76,10 +76,23 @@ const updateCustomer = async (req, res) => {
   res.redirect('/dashboard/customers')
 }
 
+const deleteCustomer = async (req, res) => {
+  const customerId = req.params.id
+
+  await Customer.findByIdAndDelete(customerId)
+  req.flash('info', {
+    message: 'Customer Deleted',
+    type: 'success',
+  })
+
+  res.redirect('/dashboard/customers')
+}
+
 module.exports = {
   showCustomers,
   createCustomer,
   editCustomer,
   updateCustomer,
+  deleteCustomer,
   validateCustomer,
 }
