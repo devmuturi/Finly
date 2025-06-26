@@ -2,6 +2,7 @@ const User = require('../libs/models/user.model')
 const bcrypt = require('bcrypt')
 const { body, validationResult } = require('express-validator')
 
+// Validation Middlewares
 const validateSignUp = [
   body('email', 'Email must not be empty').notEmpty(),
   body('password', 'Password must not be empty').notEmpty(),
@@ -12,8 +13,56 @@ const validateSignUp = [
   ),
 ]
 
+const validateLogin = [
+  body('email', 'Email must not be empty').notEmpty(),
+  body('password', 'Password must not be empty').notEmpty(),
+]
+
+// Controller Functions
+const login = async (req, res) => {
+  const validationErrors = validationResult(req)
+
+  if (!validationErrors.isEmpty()) {
+    const errors = validationErrors.array()
+    req.flash('errors', errors)
+    req.flash('data', req.body)
+    return res.redirect('/login')
+  }
+
+  const { email, password } = req.body
+  const user = await User.findOne({ email })
+
+  if (user) {
+    const passwordMatch = await bcrypt.compare(password, user.password)
+
+    if (passwordMatch) {
+      req.session.userId = user._id
+      req.flash('info', {
+        message: 'Login Successful',
+        type: 'success',
+      })
+      return res.redirect('/dashboard')
+    } else {
+      req.flash('info', {
+        message: 'Wrong Password',
+        type: 'error',
+      })
+      req.flash('data', req.body)
+      return res.redirect('/login')
+    }
+  } else {
+    req.flash('info', {
+      message: 'Email not registered',
+      type: 'error',
+    })
+    req.flash('data', req.body)
+    return res.redirect('/login')
+  }
+}
+
 const signup = async (req, res) => {
   const validationErrors = validationResult(req)
+
   if (!validationErrors.isEmpty()) {
     const errors = validationErrors.array()
     req.flash('errors', errors)
@@ -23,20 +72,17 @@ const signup = async (req, res) => {
 
   const { email, password } = req.body
   const query = { email }
-
   const existingUser = await User.findOne(query)
+
   if (existingUser) {
-    // Email already exists
     req.flash('data', req.body)
     req.flash('info', {
       message: 'Email is already registered. Try to login instead',
       type: 'error',
     })
-
-    res.redirect('/signup')
+    return res.redirect('/signup')
   } else {
     const hashedPassword = await bcrypt.hash(password, 10)
-
     const user = {
       email,
       password: hashedPassword,
@@ -48,9 +94,14 @@ const signup = async (req, res) => {
       message: 'Signup Successful',
       type: 'success',
     })
-
-    res.redirect('/dashboard')
+    return res.redirect('/dashboard')
   }
 }
 
-module.exports = { signup, validateSignUp }
+// Exports
+module.exports = {
+  signup,
+  login,
+  validateSignUp,
+  validateLogin,
+}
