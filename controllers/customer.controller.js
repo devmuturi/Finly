@@ -1,6 +1,6 @@
 const Customer = require('../libs/models/customer.model')
 
-const { body } = require('express-validator')
+const { body, validationResult } = require('express-validator')
 
 const validateCustomer = [
   body('name', 'Name must not be empty').notEmpty(),
@@ -21,4 +21,25 @@ const showCustomers = async (req, res) => {
   })
 }
 
-module.exports = { showCustomers, validateCustomer }
+const createCustomer = async (req, res) => {
+  const validationErrors = validationResult(req)
+  if (!validationErrors.isEmpty()) {
+    const errors = validationErrors.array()
+    req.flash('errors', errors)
+    req.flash('data', req.body)
+    return res.redirect('create')
+  }
+
+  const newCustomer = req.body
+  newCustomer.owner = req.session.userId
+
+  await Customer.create(newCustomer)
+  req.flash('info', {
+    message: 'Customer Created',
+    type: 'success',
+  })
+
+  res.redirect('/dashboard/customers')
+}
+
+module.exports = { showCustomers, createCustomer, validateCustomer }
