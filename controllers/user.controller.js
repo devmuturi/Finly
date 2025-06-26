@@ -19,6 +19,7 @@ const validateLogin = [
 ]
 
 // Controller Functions
+// login functionality
 const login = async (req, res) => {
   const validationErrors = validationResult(req)
 
@@ -26,6 +27,7 @@ const login = async (req, res) => {
     const errors = validationErrors.array()
     req.flash('errors', errors)
     req.flash('data', req.body)
+
     return res.redirect('/login')
   }
 
@@ -60,6 +62,17 @@ const login = async (req, res) => {
   }
 }
 
+// logout functionality
+const logout = (req, res) => {
+  req.session.userId = null
+  req.flash('info', {
+    message: 'Logout Successful',
+    type: 'success',
+  })
+  res.redirect('/')
+}
+
+// Sign up functionality
 const signup = async (req, res) => {
   const validationErrors = validationResult(req)
 
@@ -101,7 +114,8 @@ const signup = async (req, res) => {
 // Exports
 module.exports = {
   signup,
-  login,
   validateSignUp,
+  login,
   validateLogin,
+  logout,
 }
