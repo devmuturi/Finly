@@ -7,6 +7,7 @@ const {
 } = require('../controllers/user.controller')
 const { Router } = require('express')
 const router = Router()
+const { redirectAuthenticated } = require('../libs/middleware')
 
 router.get('/', (req, res) => {
   res.render('pages/index', {
@@ -15,7 +16,7 @@ router.get('/', (req, res) => {
   })
 })
 
-router.get('/signup', (req, res) => {
+router.get('/signup', redirectAuthenticated, (req, res) => {
   res.render('pages/signup', {
     title: 'Sign up',
     user: req.flash('data')[0],
@@ -24,7 +25,7 @@ router.get('/signup', (req, res) => {
   })
 })
 
-router.get('/login', (req, res) => {
+router.get('/login', redirectAuthenticated, (req, res) => {
   res.render('pages/login', {
     title: 'Sign in',
     user: req.flash('data')[0],
