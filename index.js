@@ -5,6 +5,7 @@ const userRouter = require('./routes/user.route')
 const dashboardRouter = require('./routes/dashboard.route')
 const session = require('express-session')
 const flash = require('connect-flash')
+const { verifyUser } = require('./libs/middleware')
 
 require('dotenv').config()
 require('./libs/dbConnect')
@@ -39,7 +40,7 @@ app.set('view engine', 'ejs')
 
 app.use('/', userRouter)
 
-app.use('/dashboard', dashboardRouter)
+app.use('/dashboard', verifyUser, dashboardRouter)
 
 app.get('/*splat', (req, res) => {
   res.status(404).render('index', { message: 'Not Found' })
