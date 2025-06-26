@@ -1,6 +1,6 @@
 const Customer = require('../libs/models/customer.model')
 
-const { body, validationResult } = require('express-validator')
+const { body } = require('express-validator')
 
 const validateCustomer = [
   body('name', 'Name must not be empty').notEmpty(),
