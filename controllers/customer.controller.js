@@ -42,4 +42,44 @@ const createCustomer = async (req, res) => {
   res.redirect('/dashboard/customers')
 }
 
-module.exports = { showCustomers, createCustomer, validateCustomer }
+const editCustomer = async (req, res) => {
+  const customerId = req.params.id
+  const customer = await Customer.findById(customerId)
+
+  res.render('pages/customers', {
+    title: 'Edit Customer',
+    type: 'form',
+    formAction: 'edit',
+    customer: req.flash('data')[0] || customer,
+    errors: req.flash('errors'),
+  })
+}
+
+const updateCustomer = async (req, res) => {
+  const validationErrors = validationResult(req)
+  if (!validationErrors.isEmpty()) {
+    const errors = validationErrors.array()
+    req.flash('errors', errors)
+    req.flash('data', req.body)
+    return res.redirect('edit')
+  }
+
+  const customerId = req.params.id
+  const customerData = req.body
+
+  await Customer.findByIdAndUpdate(customerId, customerData)
+  req.flash('info', {
+    message: 'Customer Updated',
+    type: 'success',
+  })
+
+  res.redirect('/dashboard/customers')
+}
+
+module.exports = {
+  showCustomers,
+  createCustomer,
+  editCustomer,
+  updateCustomer,
+  validateCustomer,
+}
