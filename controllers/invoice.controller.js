@@ -1,5 +1,6 @@
 const Customer = require('../libs/models/customer.model')
 const Invoice = require('../libs/models/invoice.model')
+const { KenyanShillings } = require('../libs/formatter')
 
 const { body, validationResult } = require('express-validator')
 
@@ -26,6 +27,7 @@ const showInvoices = async (req, res) => {
     title: 'Invoices',
     type: 'data',
     invoices,
+    KenyanShillings,
     info: req.flash('info')[0],
   })
 }
