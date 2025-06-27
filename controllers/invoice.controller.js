@@ -58,9 +58,48 @@ const getCustomers = async (req, res, next) => {
   next()
 }
 
+const editInvoice = async (req, res) => {
+  const invoiceId = req.params.id
+  const invoice = await populateInvoices(Invoice.findById(invoiceId))
+  const { customers } = req
+
+  res.render('pages/invoices', {
+    title: 'Edit Invoice',
+    type: 'form',
+    formAction: 'edit',
+    customers,
+    invoice: req.flash('data')[0] || invoice,
+    errors: req.flash('errors'),
+  })
+}
+
+const updateInvoice = async (req, res) => {
+  const validationErrors = validationResult(req)
+  if (!validationErrors.isEmpty()) {
+    const errors = validationErrors.array()
+
+    req.flash('errors', errors)
+    req.flash('data', req.body)
+    return res.redirect('edit')
+  }
+
+  const invoiceId = req.params.id
+  const data = req.body
+
+  await Invoice.findByIdAndUpdate(invoiceId, data)
+  req.flash('info', {
+    message: 'Invoice Updated',
+    type: 'success',
+  })
+
+  res.redirect('/dashboard/invoices')
+}
+
 module.exports = {
   showInvoices,
   createInvoice,
   getCustomers,
+  editInvoice,
+  updateInvoice,
   validateInvoice,
 }
