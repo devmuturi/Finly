@@ -95,11 +95,24 @@ const updateInvoice = async (req, res) => {
   res.redirect('/dashboard/invoices')
 }
 
+const deleteInvoice = async (req, res) => {
+  const invoiceId = req.params.id
+
+  await Invoice.findByIdAndDelete(invoiceId)
+  req.flash('info', {
+    message: 'Invoice Deleted',
+    type: 'success',
+  })
+
+  res.redirect('/dashboard/invoices')
+}
+
 module.exports = {
   showInvoices,
   createInvoice,
   getCustomers,
   editInvoice,
   updateInvoice,
+  deleteInvoice,
   validateInvoice,
 }

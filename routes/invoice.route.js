@@ -7,6 +7,7 @@ const {
   getCustomers,
   editInvoice,
   updateInvoice,
+  deleteInvoice,
   validateInvoice,
 } = require('../controllers/invoice.controller')
 
@@ -29,5 +30,7 @@ router.post('/create', validateInvoice, createInvoice)
 router.get('/:id/edit', editInvoice)
 
 router.post('/:id/edit', validateInvoice, updateInvoice)
+
+router.post('/:id/delete', deleteInvoice)
 
 module.exports = router
