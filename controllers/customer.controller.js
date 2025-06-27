@@ -2,6 +2,8 @@ const Customer = require('../libs/models/customer.model')
 
 const { body, validationResult } = require('express-validator')
 
+const Invoice = require('../libs/models/invoice.model')
+
 const validateCustomer = [
   body('name', 'Name must not be empty').notEmpty(),
   body('email', 'Email must not be empty').notEmpty(),
@@ -79,6 +81,8 @@ const updateCustomer = async (req, res) => {
 const deleteCustomer = async (req, res) => {
   const customerId = req.params.id
 
+  // delete invoices by that customer
+  await Invoice.deleteMany({ customer: customerId })
   await Customer.findByIdAndDelete(customerId)
   req.flash('info', {
     message: 'Customer Deleted',

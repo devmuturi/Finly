@@ -3,11 +3,11 @@ const router = express.Router()
 
 const {
   showInvoices,
-  createInvoice,
-  getCustomers,
   editInvoice,
+  createInvoice,
   updateInvoice,
   deleteInvoice,
+  getCustomers,
   validateInvoice,
 } = require('../controllers/invoice.controller')
 
@@ -16,7 +16,7 @@ router.get('/', showInvoices)
 router.get('/create', getCustomers, (req, res) => {
   const { customers } = req
   res.render('pages/invoices', {
-    title: 'Create Invoices',
+    title: 'Create Invoice',
     formAction: 'create',
     type: 'form',
     customers,
@@ -27,7 +27,7 @@ router.get('/create', getCustomers, (req, res) => {
 
 router.post('/create', validateInvoice, createInvoice)
 
-router.get('/:id/edit', editInvoice)
+router.get('/:id/edit', getCustomers, editInvoice)
 
 router.post('/:id/edit', validateInvoice, updateInvoice)
 

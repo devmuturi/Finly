@@ -10,18 +10,6 @@ const validateInvoice = [
   body('status', 'Select the Status').notEmpty(),
 ]
 
-const showInvoices = async (req, res) => {
-  const query = { owner: req.session.userId }
-
-  const invoices = await Invoice.find(query)
-  res.render('pages/invoices', {
-    title: 'Invoices',
-    type: 'data',
-    invoices,
-    info: req.flash('info')[0],
-  })
-}
-
 const populateInvoices = (query) => {
   return query.populate({
     path: 'customer',
@@ -30,25 +18,16 @@ const populateInvoices = (query) => {
   })
 }
 
-const createInvoice = async (req, res) => {
-  const validationErrors = validationResult(req)
-  if (!validationErrors.isEmpty()) {
-    const errors = validationErrors.array()
-    req.flash('errors', errors)
-    req.flash('data', req.body)
-    return res.redirect('create')
-  }
+const showInvoices = async (req, res) => {
+  const query = { owner: req.session.userId }
 
-  const newInvoice = req.body
-  newInvoice.owner = req.session.userId
-
-  await Invoice.create(newInvoice)
-  req.flash('info', {
-    message: 'New Invoice Created',
-    type: 'success',
+  const invoices = await populateInvoices(Invoice.find(query))
+  res.render('pages/invoices', {
+    title: 'Invoices',
+    type: 'data',
+    invoices,
+    info: req.flash('info')[0],
   })
-
-  res.redirect('/dashboard/invoices')
 }
 
 const getCustomers = async (req, res, next) => {
@@ -73,11 +52,30 @@ const editInvoice = async (req, res) => {
   })
 }
 
+const createInvoice = async (req, res) => {
+  const validationErrors = validationResult(req)
+  if (!validationErrors.isEmpty()) {
+    const errors = validationErrors.array()
+    req.flash('errors', errors)
+    req.flash('data', req.body)
+    return res.redirect('create')
+  }
+
+  const newInvoice = req.body
+  newInvoice.owner = req.session.userId
+
+  await Invoice.create(newInvoice)
+  req.flash('info', {
+    message: 'New Invoice Created',
+    type: 'success',
+  })
+  res.redirect('/dashboard/invoices')
+}
+
 const updateInvoice = async (req, res) => {
   const validationErrors = validationResult(req)
   if (!validationErrors.isEmpty()) {
     const errors = validationErrors.array()
-
     req.flash('errors', errors)
     req.flash('data', req.body)
     return res.redirect('edit')
@@ -89,9 +87,8 @@ const updateInvoice = async (req, res) => {
   await Invoice.findByIdAndUpdate(invoiceId, data)
   req.flash('info', {
     message: 'Invoice Updated',
-    type: 'success',
+    type: 'sucess',
   })
-
   res.redirect('/dashboard/invoices')
 }
 
@@ -103,16 +100,15 @@ const deleteInvoice = async (req, res) => {
     message: 'Invoice Deleted',
     type: 'success',
   })
-
   res.redirect('/dashboard/invoices')
 }
 
 module.exports = {
   showInvoices,
+  editInvoice,
+  deleteInvoice,
+  updateInvoice,
   createInvoice,
   getCustomers,
-  editInvoice,
-  updateInvoice,
-  deleteInvoice,
   validateInvoice,
 }
