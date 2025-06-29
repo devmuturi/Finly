@@ -15,6 +15,16 @@ const showCustomers = async (req, res) => {
   const query = { owner: req.session.userId }
   const customers = await Customer.find(query)
 
+  const { search } = req.query
+  if (search) {
+    query['$or'] = [
+      { name: { $regex: search, $options: 'i' } },
+      { email: { $regex: search, $options: 'i' } },
+      { phone: { $regex: search, $options: 'i' } },
+      { address: { $regex: search, $options: 'i' } },
+    ]
+  }
+
   res.render('pages/customers', {
     title: 'Customers',
     type: 'data',
