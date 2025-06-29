@@ -1,7 +1,7 @@
 const Customer = require('../libs/models/customer.model')
 const Invoice = require('../libs/models/invoice.model')
 
-const { KenyanShilling } = require('../libs/formatter')
+const { KenyanShillings } = require('../libs/formatter')
 
 const showDashboard = async (req, res) => {
   const query = { owner: req.session.userId }
@@ -19,13 +19,17 @@ const showDashboard = async (req, res) => {
     return invoice.status === 'paid' ? sum + invoice.amount : sum
   }, 0)
 
+  const totalPending = allInvoices.reduce((sum, invoice) => {
+    return invoice.status === 'pending' ? sum + invoice.amount : sum
+  }, 0)
+
   res.render('pages/dashboard', {
     title: 'Dashboard',
     invoiceCount,
     customerCount,
     totalPaid,
     totalPending,
-    KenyanShilling,
+    KenyanShillings,
     info: req.flash('info')[0],
   })
 }
