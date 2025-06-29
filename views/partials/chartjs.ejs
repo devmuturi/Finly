@@ -1,0 +1,25 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const revenueData = JSON.parse('<%- revenueData %>');
+  const canvas = document.getElementById('revenueChart');
+  new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: revenueData.map(item => item.month),
+      datasets: [{
+        label: 'Revenue',
+        data: revenueData.map(item => item.revenue),
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>

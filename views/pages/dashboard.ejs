@@ -13,8 +13,7 @@
             <i aria-hidden="true" class="fa-solid fa-money-bills"></i>
             <h3 class="ml-2 text-sm font-medium">Collected</h3>
           </div>
-          <p class=" truncate rounded-xl border-slate-200 border px-4 py-8
-text-center text-2xl">
+          <p class=" truncate rounded-xl border-slate-200 border px-4 py-8 text-center text-2xl">
             <%= KenyanShillings.format(totalPaid) %>
           </p>
         </div>
@@ -23,8 +22,7 @@ text-center text-2xl">
             <i aria-hidden="true" class="fa-regular fa-clock"></i>
             <h3 class="ml-2 text-sm font-medium">Pending</h3>
           </div>
-          <p class=" truncate rounded-xl border-slate-200 border px-4 py-8
-text-center text-2xl">
+          <p class=" truncate rounded-xl border-slate-200 border px-4 py-8 text-center text-2xl">
             <%= KenyanShillings.format(totalPending) %>
           </p>
         </div>
@@ -33,8 +31,7 @@ text-center text-2xl">
             <i aria-hidden="true" class="fa-regular fa-folder-open"></i>
             <h3 class="ml-2 text-sm font-medium">Total Invoices</h3>
           </div>
-          <p class=" truncate rounded-xl border-slate-200 border px-4 py-8
-text-center text-2xl">
+          <p class=" truncate rounded-xl border-slate-200 border px-4 py-8 text-center text-2xl">
             <%= invoiceCount %>
           </p>
         </div>
@@ -43,14 +40,64 @@ text-center text-2xl">
             <i aria-hidden="true" class="fa-solid fa-users"></i>
             <h3 class="ml-2 text-sm font-medium">Total Customers</h3>
           </div>
-          <p class=" truncate rounded-xl border-slate-200 border px-4 py-8
-text-center text-2xl">
+          <p class=" truncate rounded-xl border-slate-200 border px-4 py-8 text-center text-2xl">
             <%= customerCount %>
           </p>
         </div>
       </div>
+      <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
+        <div class="w-full md:col-span-4">
+          <h2 class=" mb-4 text-2xl">
+            Recent Revenue
+          </h2>
+          <div class="rounded-xl bg-white p-4">
+            <canvas id="revenueChart" width="600" height="400"></canvas>
+            <div class="flex items-center pb-2 pt-6">
+              <i aria-hidden="true" class="fa-regular fa-calendar fa-lg"></i>
+              <h3 class="ml-2 text-sm text-slate-1000">Last 6 months</h3>
+            </div>
+          </div>
+        </div>
+        <div class="flex w-full flex-col md:col-span-4">
+          <h2 class=" mb-4 text-2xl">
+            Latest Invoices
+          </h2>
+          <div class="flex grow flex-col justify-between rounded-xl bg-white p-4">
+            <div class="border-slate-200 border px-6">
+              <% latestInvoices.forEach(invoice => { %>
+              <div class="flex flex-row items-center justify-between py-4">
+                <div class="flex items-center">
+                  <p class="truncate font-semibold text-base">
+                    <%= invoice.customer.name %>
+                  </p>
+                  <p class="hidden text-sm text-slate-1000 sm:block">
+                    <% if(invoice.status === 'paid') { %>
+                    <span class="ml-2 badge badge-sm badge-success p-3 gap-3 text-white">
+                      Paid <i class="fa-regular fa-circle-check"></i>
+                    </span>
+                    <% } else { %>
+                    <span class="ml-2 badge badge-sm badge-ghost p-3 gap-3">
+                      Pending <i class="fa-regular fa-clock"></i>
+                    </span>
+                    <% } %>
+                  </p>
+                </div>
+                <p class=" truncate font-medium">
+                  <%= KenyanShillings.format(invoice.amount) %>
+                </p>
+              </div>
+              <% }) %>
+            </div>
+            <div class="flex items-center pb-2 pt-6">
+              <i aria-hidden="true" class="fa-regular fa-note-sticky fa-lg"></i>
+              <h3 class="ml-2 text-sm text-slate-1000">Last 5 invoices</h3>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+  <%- include('../partials/chartjs')%>
   <%- include('../partials/script') %>
 </body>
 
