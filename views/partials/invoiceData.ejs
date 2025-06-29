@@ -2,22 +2,33 @@
   <div class="flex w-full items-center justify-between">
     <h1 class="text-2xl"><%= title %></h1>
   </div>
-  <form>
+
+  <!-- Search Form -->
+  <form method="GET" action="/dashboard/invoices">
     <div class="mt-4 flex items-center justify-between gap-2 md:mt-8">
       <div class="relative flex flex-1 flex-shrink-0">
-        <label for="search" class="input input-bordered flex items-center gap-
-2 w-full">
+        <label for="search" class="input input-bordered flex items-center gap-2 w-full">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input id="search" name="search" type="text" class="grow" placeholder="Search invoices..." />
+          <input id="search" name="search" type="text" class="grow" placeholder="Search by customer name..." value="<%= typeof search !== 'undefined' ? search : '' %>" />
         </label>
       </div>
-      <a class="btn btn-primary" href="invoices/create">
-        <i class="fa-solid fa-plus fa-lg mr-2"></i>
-        New Invoice
-      </a>
+      <div class="flex gap-2">
+        <% if (search) { %>
+        <a href="/dashboard/invoices" class="btn btn-outline">
+          Clear
+        </a>
+        <% } %>
+        <a class="btn btn-primary" href="/dashboard/invoices/create">
+          <i class="fa-solid fa-plus fa-lg mr-2"></i>
+          New Invoice
+        </a>
+      </div>
     </div>
   </form>
+
+  <!-- Invoices Table -->
   <div class="mt-6 overflow-x-auto bg-white rounded-lg p-2">
+    <% if (invoices.length > 0) { %>
     <table class="table">
       <thead>
         <tr>
@@ -25,35 +36,34 @@
           <th>Amount</th>
           <th>Due Date</th>
           <th>Status</th>
-          <th></th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <% invoices.forEach(function(invoice){ %>
         <tr>
-          <td> <%= invoice.customer.name %> </td>
-          <td> <%= KenyanShillings.format(invoice.amount) %> </td>
-          <td> <%= new Date(invoice.date).toLocaleDateString('en-US') %> </td>
+          <td><%= invoice.customer?.name || 'N/A' %></td>
+          <td><%= KenyanShillings.format(invoice.amount) %></td>
+          <td><%= new Date(invoice.date).toLocaleDateString('en-US') %></td>
           <td>
             <% if(invoice.status === 'paid') { %>
-            <span class="ml-2 badge badge-sm badge-success p-3 gap-3 text-
-white">
+            <span class="badge badge-success p-3 gap-2 text-white">
               Paid <i class="fa-regular fa-circle-check"></i>
             </span>
             <% } else { %>
-            <span class="ml-2 badge badge-sm badge-ghost p-3 gap-3">
+            <span class="badge badge-warning p-3 gap-2">
               Pending <i class="fa-regular fa-clock"></i>
             </span>
             <% } %>
           </td>
           <td>
             <div class="flex justify-end gap-3">
-              <a class="rounded-md border p-2 hover:bg-gray-100" href="invoices/<%= invoice._id %>/edit">
+              <a class="rounded-md border p-2 hover:bg-gray-100" href="/dashboard/invoices/<%= invoice._id %>/edit">
                 <i class="fa-solid fa-pen-to-square fa-lg"></i>
               </a>
               <button class="rounded-md border p-2 hover:bg-gray-100" onclick="deleteModal('<%= invoice._id %>')">
-                <span class="sr-only">Delete</span><i class="fa-solid fa-trash
-fa-lg"></i>
+                <span class="sr-only">Delete</span>
+                <i class="fa-solid fa-trash fa-lg"></i>
               </button>
             </div>
           </td>
@@ -61,15 +71,39 @@ fa-lg"></i>
         <% }); %>
       </tbody>
     </table>
+    <% } else { %>
+    <div class="flex flex-col items-center justify-center p-8 text-center">
+      <i class="fa-solid fa-file-invoice text-4xl text-gray-400 mb-4"></i>
+      <p class="text-lg font-medium">
+        <% if (search) { %>
+        No invoices found matching "<%= search %>"
+        <% } else { %>
+        No invoices found
+        <% } %>
+      </p>
+      <% if (search) { %>
+      <a href="/dashboard/invoices" class="btn btn-ghost mt-4">
+        Clear search
+      </a>
+      <% } else { %>
+      <a href="/dashboard/invoices/create" class="btn btn-primary mt-4">
+        <i class="fa-solid fa-plus mr-2"></i>
+        Create your first invoice
+      </a>
+      <% } %>
+    </div>
+    <% } %>
   </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
 <dialog id="delete-modal" class="modal">
   <div class="modal-box">
     <h3 class="font-bold text-lg">Are you sure?</h3>
-    <p class="py-4">The invoice will be deleted</p>
+    <p class="py-4">This invoice will be permanently deleted</p>
     <div class="modal-action">
       <form id='delete-form' method="post">
-        <button class="btn btn-danger">Yes</button>
+        <button class="btn btn-error">Yes, delete</button>
       </form>
       <form method="dialog">
         <button class="btn">Cancel</button>
@@ -77,11 +111,12 @@ fa-lg"></i>
     </div>
   </div>
 </dialog>
+
 <script>
   function deleteModal(invoiceId) {
     const modal = document.querySelector('#delete-modal');
     const deleteForm = document.querySelector('#delete-form');
-    deleteForm.setAttribute('action', `invoices/${invoiceId}/delete`)
+    deleteForm.setAttribute('action', `/dashboard/invoices/${invoiceId}/delete`);
     modal.showModal();
   }
 </script>
