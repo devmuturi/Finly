@@ -5,29 +5,24 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "build": "npm run css && npm install --omit=dev",
     "build:css": "postcss public/css/tailwind.css -o public/css/main.css",
     "css": "postcss public/css/tailwind.css -o public/css/main.css",
-    "watch:css": "postcss public/css/tailwind.css -o public/css/main.css --watch"
+    "watch:css": "postcss public/css/tailwind.css -o public/css/main.css --watch",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "@eslint/js": "^9.29.0",
-    "autoprefixer": "^10.4.21",
-    "daisyui": "^4.12.24",
-    "eslint": "^9.29.0",
-    "globals": "^16.2.0",
-    "nodemon": "^3.1.10",
-    "postcss": "^8.5.6",
-    "postcss-cli": "^11.0.1",
-    "prettier": "^3.6.0",
-    "tailwindcss": "^3.4.17"
+  "engines": {
+    "node": "18.x",
+    "npm": "9.x"
   },
   "dependencies": {
+    "@eslint/js": "^9.29.0",
+    "autoprefixer": "^10.4.21",
     "bcrypt": "^6.0.0",
     "connect-flash": "^0.1.1",
+    "connect-mongo": "^5.0.0",
+    "daisyui": "^4.12.24",
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
@@ -35,6 +30,15 @@
     "express-validator": "^7.2.1",
     "mongodb": "^6.17.0",
     "mongoose": "^8.16.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "tailwindcss": "^3.4.17"
+  },
+  "devDependencies": {
+    "eslint": "^9.29.0",
+    "globals": "^16.2.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.0"
   }
 }
