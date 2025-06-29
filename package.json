@@ -6,6 +6,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "build:css": "postcss public/css/tailwind.css -o public/css/main.css",
+    "css": "postcss public/css/tailwind.css -o public/css/main.css",
     "watch:css": "postcss public/css/tailwind.css -o public/css/main.css --watch"
   },
   "keywords": [],
